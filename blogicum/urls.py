@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from blog.views import RegistrationCreateView
 from pages.views import page_not_found, permission_denied, server_error
 
 urlpatterns = [
@@ -10,7 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls', namespace='blog')),
     path('pages/', include('pages.urls', namespace='pages')),
-    path('auth/registration/', include('blog.urls', namespace='registration')),
+    path('auth/registration/', RegistrationCreateView.as_view(), name='registration'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler403 = 'pages.views.permission_denied'

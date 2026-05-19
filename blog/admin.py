@@ -62,4 +62,3 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('text', 'author')
     ordering = ('-created_at',)
     list_display_links = ('text',)
-    

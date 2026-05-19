@@ -114,4 +114,3 @@ class Comment(CreatedModel):
 
     def __str__(self):
         return self.text[:SLICE]
-    

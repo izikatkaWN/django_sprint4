@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from blog.forms import CommentForm, PostForm
 from blog.models import Comment, Post
+from core.utils import paginate_queryset
 
 
 class IsAuthorMixin(UserPassesTestMixin):
@@ -11,6 +12,20 @@ class IsAuthorMixin(UserPassesTestMixin):
     
     def test_func(self):
         return self.get_object().author == self.request.user
+
+
+class PaginationMixin:
+    """Миксин для пагинации с вынесенной логикой."""
+    
+    paginate_by = 10
+    
+    def paginate_queryset(self, queryset, page_size):
+        """Пагинация queryset с использованием вынесенной функции."""
+
+        paginator, page, page_number = paginate_queryset(
+            queryset, self.request, page_size
+        )
+        return (paginator, page, page.object_list, page.has_other_pages())
 
 
 class PostMixin(IsAuthorMixin, LoginRequiredMixin):
@@ -32,7 +47,7 @@ class PostMixin(IsAuthorMixin, LoginRequiredMixin):
 
         return reverse(
             'blog:profile',
-            kwargs={'username_slug': self.request.user.username}
+            kwargs={'username': self.request.user.username}
         )
 
     def get_context_data(self, **kwargs):
@@ -55,3 +70,8 @@ class CommentMixin(LoginRequiredMixin):
             kwargs={'post_id': self.kwargs['post_id']}
         )
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'delete_comment' in self.request.path:
+            context['form'] = None
+        return context

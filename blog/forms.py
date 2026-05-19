@@ -9,7 +9,7 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ['title', 'text', 'pub_date', 'category', 'location', 'image']
+        fields = ['title', 'text', 'pub_date', 'category', 'location', 'image', 'is_published']
         widgets = {
             'pub_date': forms.DateTimeInput(
                 format='%Y-%m-%dT%H:%M',
@@ -27,15 +27,18 @@ class PostForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             'location': forms.Select(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'is_published': forms.HiddenInput(),  
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Показываем только опубликованные категории и локации
         self.fields['category'].queryset = Category.objects.filter(is_published=True)
         self.fields['location'].queryset = Location.objects.filter(is_published=True)
         self.fields['location'].empty_label = 'Не выбрано'
         self.fields['location'].required = False
+        
+        self.fields['is_published'].initial = True
+        self.fields['is_published'].required = False
 
 
 class ProfileForm(forms.ModelForm):
