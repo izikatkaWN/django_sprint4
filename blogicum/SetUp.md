@@ -1,7 +1,7 @@
 ## Развёртывание проекта:
 + Клонировать репозиторий и перейти в него в командной строке:
 ```shell script
-git clone git@github.com:Furturnax/django_sprint4.git
+git clone https://github.com/izikatkaWN/team-finder-ad.git
 ```
 
 ```shell script
