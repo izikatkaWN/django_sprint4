@@ -117,7 +117,6 @@ def test_comment(
         user_client, post_with_published_location.id
     )
 
-    # create comments
     creation_tester = CreateCommentFormTester(
         a_post_get_response,
         CommentModel,
@@ -148,7 +147,6 @@ def test_comment(
             " в круглых скобках."
         )
 
-    # check comment count on profile page
     comment_adapter = CommentModelAdapter(created_items[0])
     comment_post_adapter = PostModelAdapter(comment_adapter.post)
     author_profile_url = f'/profile/{comment_post_adapter.author.username}/'
@@ -164,7 +162,6 @@ def test_comment(
 
     created_item_adapters = [CommentModelAdapter(i) for i in created_items]
 
-    # edit comments
     post_url = f"/posts/{post_with_published_location.id}/"
     edit_url, del_url = find_edit_and_delete_urls(
         created_item_adapters,
